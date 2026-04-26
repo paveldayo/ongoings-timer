@@ -13,8 +13,8 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { ReactElement, useEffect, useState } from "react"
 import { parseDateToCountdown } from "../utils"
-import { deleteCard } from "@/featuresOLD/cards-list/actions"
 import { useRouter } from "next/navigation";
+import { deleteCard } from "../actions/deleteCard"
 
 interface Props {
   card: Card
