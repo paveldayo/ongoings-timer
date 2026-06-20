@@ -1,4 +1,4 @@
-'use client' // Temp!
+'use client'
 import { Button } from "@/components/ui/button"
 import { Card } from "@/entities/card/types"
 import { MinusIcon, MoreVerticalIcon, PlusIcon } from "lucide-react"
@@ -15,11 +15,13 @@ import { ReactElement, useEffect, useState } from "react"
 import { parseDateToCountdown } from "../utils"
 import { useRouter } from "next/navigation";
 import { deleteCard } from "../actions/deleteCard"
+import { changeWatched } from "../actions/changeWatched"
 
 interface Props {
   card: Card
 }
 export default function CardItem({ card }: Props) {
+  const router = useRouter()
   const [countdown, setCountdown] = useState(parseDateToCountdown(new Date(card.next_episode_at)))
 
   useEffect(() => {
@@ -31,6 +33,11 @@ export default function CardItem({ card }: Props) {
       clearInterval(x)
     }
   })
+
+  const handleWatchedChange = (id: string, diff: -1 | 1) => {
+    changeWatched(id, diff)
+    router.refresh()
+  }
 
   return (
     <div className="h-60 border rounded-md overflow-hidden shadow-[-3px_4px_10px_0_rgba(0,0,0,0.25)] flex">
@@ -53,7 +60,7 @@ export default function CardItem({ card }: Props) {
             <Button
               variant={"ghost"}
               className="px-1 text-inherit hover:text-[#5e5e6e]"
-              onClick={() => console.log('- clicked!')}
+              onClick={() => handleWatchedChange(card.id, -1)}
             >
               <MinusIcon className="size-4.5"/>
             </Button>
@@ -64,7 +71,7 @@ export default function CardItem({ card }: Props) {
             <Button
               variant={"ghost"}
               className="px-1 text-inherit hover:text-[#5e5e6e]"
-              onClick={() => console.log('+ clicked!')}
+              onClick={() => handleWatchedChange(card.id, 1)}
             >
               <PlusIcon className="size-4.5"/>
             </Button>
@@ -105,7 +112,7 @@ function CardOptionsDropdown({ trigger, cardId}: {trigger: ReactElement, cardId:
       <DropdownMenuContent>
         <DropdownMenuGroup>
           <DropdownMenuItem onClick={() => handleDelete(cardId)}>Delete</DropdownMenuItem>
-          <DropdownMenuItem>Edit</DropdownMenuItem>
+          <DropdownMenuItem disabled>Edit</DropdownMenuItem>
           <DropdownMenuItem disabled>Archive (?)</DropdownMenuItem>
         </DropdownMenuGroup>
         {/* <DropdownMenuSeparator />

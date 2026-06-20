@@ -8,13 +8,19 @@ interface Props {
 }
 
 export default function CardsList({ selectedDay = 0, cards, renderCardItem }: Props) {
+  const filteredCards = cards.filter(c => c.release_day_of_week === selectedDay)
+  
+  if (filteredCards.length === 0) {
+    return (
+      <div className="text-muted-foreground text-center mt-10">
+        No cards available for this day  ¯\_(ツ)_/¯ 
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-3">
-      { 
-        cards
-          .filter(c => c.release_day_of_week === selectedDay)
-          .map(c => renderCardItem(c, c.id))
-      }
+      {filteredCards.map(c => renderCardItem(c, c.id))}
     </div>
-  )
+  );
 }
