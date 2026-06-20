@@ -1,7 +1,7 @@
 'use client'
 
 /**
- * @description Controls for list of cards: searching and sorting + extension slot 
+ * @description Controls for list of cards: searching and sorting + extension slot
  */
 
 import { Button } from "@/components/ui/button"
@@ -11,8 +11,8 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group"
-import CreateCardFormWrapper from "@/features/create-card/components/CreateCardFormWrapper"
 import { SearchIcon, SortAscIcon, SortDescIcon } from "lucide-react"
+import { ReactNode } from "react"
 import { Dispatch, SetStateAction } from "react"
 
 interface Props {
@@ -20,9 +20,16 @@ interface Props {
   setAscSort: Dispatch<SetStateAction<boolean>>
   filter: string
   setFilter: Dispatch<SetStateAction<string>>
+  renderActions?: () => ReactNode
 }
 
-export default function CardsListControls({ ascSort, setAscSort, filter, setFilter } : Props) {
+export default function CardsListControls({
+  ascSort,
+  setAscSort,
+  filter,
+  setFilter,
+  renderActions,
+}: Props) {
   return (
     <div className="space-x-3 flex">
       <Field className="shadow-sm">
@@ -39,8 +46,7 @@ export default function CardsListControls({ ascSort, setAscSort, filter, setFilt
         {ascSort ? <SortDescIcon /> :  <SortAscIcon />}
       </Button>
 
-      {/* TODO: Refactor. Features should not depend on each other!! */}
-      <CreateCardFormWrapper />
+      {renderActions?.()}
     </div>
   )
 }
