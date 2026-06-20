@@ -29,7 +29,8 @@ export default function CardsPanel({ initialCards }: { initialCards: Card[] }) {
       />
 
       <CardsList
-        cards={cards}
+        selectedDay={ selectedDay }
+        cards={ cards }
         renderCardItem={(cardData, key) => (
           <CardItem card={cardData} key={key} />
         )}

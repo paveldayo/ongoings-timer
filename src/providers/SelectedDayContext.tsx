@@ -1,6 +1,6 @@
 'use client'
 
-import { Dispatch, SetStateAction, useState, createContext, useEffect, Suspense } from "react"
+import { Dispatch, SetStateAction, useState, createContext } from "react"
 
 export interface SelectedDayContext {
   selectedDay: number

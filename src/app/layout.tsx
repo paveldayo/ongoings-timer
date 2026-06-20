@@ -35,6 +35,8 @@ export default function RootLayout({
     >
       <body className="min-h-full max-w-480 mx-auto flex flex-col font-[Geist]">
         <Suspense>
+          {/*  TODO: Group providers */}
+          {/*  TODO: stop re-render wave using memo */}
           <SelectedDayProvider>
             <Header />
             <NuqsAdapter>

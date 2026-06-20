@@ -45,10 +45,10 @@ export default function CardItem({ card }: Props) {
         quality={100}
         loading="eager"
       />
-      {/* <img src={`http://localhost:3000/api/images/${card.image_key}`}/> */}
       <div className="p-5 grow gap-2 flex items-center justify-evenly">
         <div className="grow-5 shrink-0 basis-0 min-w-auto flex flex-col items-start">
-          <span className="mb-2 text-xl font-semibold text-center">Fate/Strange Fake I</span>
+          {/* TODO: Add formatting when rendering title (capitalize words, uppercase roman numerals etc) */}
+          <span className="mb-2 text-xl font-semibold text-center">{ card.title }</span>
           <span className="text-[#9494a2] flex items-center gap-2.5">
             <Button
               variant={"ghost"}
@@ -57,7 +57,10 @@ export default function CardItem({ card }: Props) {
             >
               <MinusIcon className="size-4.5"/>
             </Button>
-            <span className="text-xl font-mono tracking-widest">6/12</span>
+            {/* TODO: Lover card transparency if watched */}
+            <span className="text-xl font-mono tracking-widest">
+              {card.episodes_watched}/{card.episodes_total}
+            </span>
             <Button
               variant={"ghost"}
               className="px-1 text-inherit hover:text-[#5e5e6e]"
@@ -73,7 +76,7 @@ export default function CardItem({ card }: Props) {
           </span>
         </div>
         <div>
-          <TestDD
+          <CardOptionsDropdown
             cardId={card.id}
             trigger={
               <Button variant='ghost'>
@@ -87,7 +90,7 @@ export default function CardItem({ card }: Props) {
   )
 }
 
-function TestDD({ trigger, cardId}: {trigger: ReactElement, cardId: string}) {
+function CardOptionsDropdown({ trigger, cardId}: {trigger: ReactElement, cardId: string}) {
   const router = useRouter()
   const handleDelete = (id: string) => {
     deleteCard(id)
