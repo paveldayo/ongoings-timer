@@ -4,6 +4,7 @@ import * as React from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Controller, useForm } from "react-hook-form"
 import * as z from "zod"
+import { useRouter } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
 
@@ -29,7 +30,12 @@ const formSchema = z.object({
     .max(5000, "Are you serious?)")
 })
 
-export function CreateCardForm() {
+interface Props {
+  onSuccess?: () => void
+}
+
+export function CreateCardForm({ onSuccess }: Props) {
+  const router = useRouter()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -52,7 +58,15 @@ export function CreateCardForm() {
       formData.set("cover", "null")
     }
     
-    await createCard(formData)
+    const result = await createCard(formData)
+
+    if (!result?.success) {
+      return
+    }
+
+    form.reset()
+    router.refresh()
+    onSuccess?.()
   }
 
   return (
@@ -139,7 +153,7 @@ export function CreateCardForm() {
           />
           
           <Field orientation="horizontal" className="mt-3">
-            <Button type="submit" form="form-rhf-demo"> Create card </Button>
+            <Button type="submit" form="form-rhf-demo">Create card</Button>
           </Field>
         </FieldGroup>
       </form>
