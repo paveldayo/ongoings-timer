@@ -11,11 +11,13 @@ import CardsList from "@/features/cards-list/components/CardsList";
 import CardsListControls from "@/features/cards-list/components/CardsListControls";
 import { useCardsList } from "@/features/cards-list/hooks/useCardsList";
 
-import { useSelectedDay } from "@/hooks/useSelectedDay";
+interface Props {
+  initialCards: Card[]
+  selectedDay: number
+}
 
-export default function CardsPanel({ initialCards }: { initialCards: Card[] }) {
+export default function CardsPanel({ initialCards, selectedDay }: Props) {
   const { cards, filter, setFilter, ascSort, setAscSort } = useCardsList({ initialCards })
-  const { selectedDay } = useSelectedDay()
 
   return (
     <div className="space-y-3">

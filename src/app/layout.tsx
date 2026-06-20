@@ -2,10 +2,7 @@ import type { Metadata } from "next"
 import { Toaster } from "@/components/ui/sonner"
 import { Geist, Geist_Mono } from "next/font/google"
 import "./globals.css"
-import Header from "@/components/idk/Header/components/Header"
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
-import { SelectedDayProvider } from "@/providers/SelectedDayContext"
-import { Suspense } from "react"
 
 
 const geistSans = Geist({
@@ -34,16 +31,9 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full max-w-480 mx-auto flex flex-col font-[Geist]">
-        <Suspense>
-          {/*  TODO: Group providers */}
-          {/*  TODO: stop re-render wave using memo */}
-          <SelectedDayProvider>
-            <Header />
-            <NuqsAdapter>
-              {children}
-            </NuqsAdapter>
-          </SelectedDayProvider>
-        </Suspense>
+        <NuqsAdapter>
+          {children}
+        </NuqsAdapter>
 
         <Toaster richColors />
       </body>
