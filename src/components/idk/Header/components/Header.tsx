@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { cn } from '@/lib/shadcn/utils'
+import { cn } from '@/utils/shadcn/utils'
 import { useSelectedDay } from '@/hooks/useSelectedDay'
 
 const getTodayIndex = () => 0 // TODO: fix 

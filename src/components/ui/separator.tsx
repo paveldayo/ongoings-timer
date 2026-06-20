@@ -2,7 +2,7 @@
 
 import { Separator as SeparatorPrimitive } from "@base-ui/react/separator"
 
-import { cn } from "../../lib/shadcn/utils"
+import { cn } from "@/utils/shadcn/utils"
 
 function Separator({
   className,
