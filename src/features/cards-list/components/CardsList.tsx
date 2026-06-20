@@ -1,15 +1,16 @@
 import { Card } from "@/entities/card/types";
-import CardItem from "@/features/card-item/components/CardItem";
+import { ReactNode } from "react";
 
-export default function CardsList({ cards }: { cards: Card[] }) {
+interface Props {
+  cards: Card[]
+  renderCardItem: (data: Card, key: string) => ReactNode
+}
+
+
+export default function CardsList({ cards, renderCardItem }: Props) {
   return (
     <div className="space-y-3">
-      {
-        cards.map(c => (
-          // TODO: Refactor. Features should not dfepend on each other!!
-          <CardItem card={c} key={c.id} />
-        ))
-      }
+      { cards.map(c => renderCardItem(c, c.id)) }
     </div>
   )
 }
