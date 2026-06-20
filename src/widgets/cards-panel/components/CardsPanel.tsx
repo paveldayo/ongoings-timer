@@ -19,7 +19,6 @@ export default function CardsPanel({ initialCards }: { initialCards: Card[] }) {
 
   return (
     <div className="space-y-3">
-      selectedDay: {selectedDay}
       <CardsListControls
         filter={filter}
         setFilter={setFilter}

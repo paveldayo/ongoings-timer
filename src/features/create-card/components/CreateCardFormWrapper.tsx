@@ -13,13 +13,16 @@ import {
 import { CreateCardForm } from "./CreateCardForm";
 import { PlusIcon } from "lucide-react";
 
+/**
+ * @description Dialog component with state. No form itself. 
+ */
 export default function CreateCardFormWrapper() {
   const [open, setOpen] = useState(false)
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger render={<Button variant='outline' className='border-stone-300 shadow-sm/20'><PlusIcon/></Button>}></DialogTrigger>
-      <DialogContent>
+      <DialogContent className='min-w-1/2'>
         <DialogHeader>
           <DialogTitle className="text-center mb-3">Add show</DialogTitle>
           <CreateCardForm onSuccess={() => setOpen(false)} />

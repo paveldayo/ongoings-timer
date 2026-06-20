@@ -1,4 +1,5 @@
 'use server'
+import { getNextEpisodeAt } from "@/entities/card/utils/getNextEpisodeAt"
 import { db } from "@/lib/database/drizzle"
 
 export const  getInitialCards = async () => {
@@ -9,7 +10,10 @@ export const  getInitialCards = async () => {
 
     return rawCards.map(card => ({
       ...card,
-      next_episode_at: 1846179178982
+      next_episode_at: getNextEpisodeAt({
+        releaseDayOfWeek: card.release_day_of_week,
+        releaseTime: card.release_time,
+      }),
     }))
 
   } catch(error) {

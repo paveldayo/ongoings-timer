@@ -5,20 +5,35 @@ import { cards } from "@/lib/database/schema"
 import { s3 } from "@/lib/storage/s3"
 import { revalidatePath } from "next/cache"
 import {  PutObjectCommand } from "@aws-sdk/client-s3"
+import { createCardSchema } from "../model/createCardSchema"
 
 export async function createCard(formData: FormData) {
   try {
-    const title = formData.get("title") as string
-    const cover = formData.get("cover") as File | null
-    console.log(title, "title")
-    console.log(cover, "cover")
+    const parsed = createCardSchema.safeParse({
+      title: formData.get("title"),
+      player_url: formData.get("player_url"),
+      episodes_total: formData.get("episodes_total"),
+      episodes_watched: formData.get("episodes_watched"),
+      release_day_of_week: formData.get("release_day_of_week"),
+      release_time: formData.get("release_time"),
+    })
+
+    if (!parsed.success) {
+      return {
+        success: false,
+        error: parsed.error.issues[0]?.message ?? "Invalid card data",
+      }
+    }
+
+    const coverEntry = formData.get("cover")
+    const cover = coverEntry instanceof File ? coverEntry : null
+    const data = parsed.data
 
     let imageKey: string | null = null
 
     if (cover && cover.size > 0) {
       const buffer = Buffer.from(await cover.arrayBuffer())
       imageKey = `cover_${Math.random().toString().substring(2, 10)}`
-      console.log("imageKey", imageKey)
 
       await s3.send(
         new PutObjectCommand({
@@ -31,10 +46,13 @@ export async function createCard(formData: FormData) {
     }
 
     await db.insert(cards).values({
-      title,
-      image_key: imageKey
-      // episodes_total: data.episodes_total,
-      // episodes_watched: data.episodes_watched
+      title: data.title,
+      player_url: data.player_url || null,
+      episodes_total: data.episodes_total,
+      episodes_watched: data.episodes_watched,
+      release_day_of_week: data.release_day_of_week,
+      release_time: data.release_time,
+      image_key: imageKey,
     })
 
     revalidatePath("/cards-list")
