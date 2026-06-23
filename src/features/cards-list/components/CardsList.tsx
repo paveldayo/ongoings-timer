@@ -13,7 +13,7 @@ export default function CardsList({ selectedDay = 0, cards, renderCardItem }: Pr
   if (filteredCards.length === 0) {
     return (
       <div className="text-muted-foreground text-center mt-10">
-        No cards available for this day  ¯\_(ツ)_/¯ 
+        Nothing here yet ¯\_(ツ)_/¯ 
       </div>
     );
   }

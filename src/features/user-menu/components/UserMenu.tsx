@@ -1,6 +1,6 @@
 'use client'
 
-import { Info, LogOut, Menu, Settings } from "lucide-react"
+import { Info, LogIn, LogOut, Menu, Settings } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -10,8 +10,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { useSession, signIn, signOut } from "next-auth/react"
 
 export default function UserMenu() {
+  const session = useSession()
+
   const handleLogout = async () => {
     console.log('Logging out...')
   }
@@ -28,6 +31,9 @@ export default function UserMenu() {
       />
 
       <DropdownMenuContent align="end">
+        {
+          session.data ? 'You\'re logged in!!' : 'You\'re not logged in :('
+        }
         <DropdownMenuItem disabled>
           <Settings className="mr-2 h-4 w-4" />
           <span>Settings</span>
@@ -39,10 +45,21 @@ export default function UserMenu() {
 
         <DropdownMenuSeparator />
 
-        <DropdownMenuItem onClick={handleLogout} variant="destructive">
-          <LogOut className="mr-2 h-4 w-4" />
-          <span>Log out</span>
-        </DropdownMenuItem>
+        {
+          session.data && 
+            <DropdownMenuItem onClick={() => signOut()} variant="destructive">
+              <LogOut className="mr-2 h-4 w-4" />
+              <span>Sign out</span>
+            </DropdownMenuItem>
+        }
+
+        {
+          !session.data && 
+            <DropdownMenuItem onClick={() => signIn()}>
+              <LogIn className="mr-2 h-4 w-4" />
+              <span>Sign in</span>
+            </DropdownMenuItem>
+        }
       </DropdownMenuContent>
     </DropdownMenu>
   )

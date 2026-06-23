@@ -22,17 +22,20 @@ interface Props {
 }
 export default function CardItem({ card }: Props) {
   const router = useRouter()
-  const [countdown, setCountdown] = useState(parseDateToCountdown(new Date(card.next_episode_at)))
+  const [countdown, setCountdown] = useState<ReturnType<typeof parseDateToCountdown> | null>(null)
 
   useEffect(() => {
-    const x =setInterval(() => {
-      setCountdown(parseDateToCountdown(new Date(card.next_episode_at )))
-    }, 1000)
-
-    return () => {
-      clearInterval(x)
+    const update = () => {
+      setCountdown(parseDateToCountdown(new Date(card.next_episode_at)))
     }
-  })
+    update()
+    
+    const countdownIntervalId = setInterval(update, 1000)
+    
+    return () => {
+      clearInterval(countdownIntervalId)
+    }
+  }, [card.next_episode_at])
 
   const handleWatchedChange = (id: string, diff: -1 | 1) => {
     changeWatched(id, diff)
@@ -79,7 +82,9 @@ export default function CardItem({ card }: Props) {
         </div>
         <div className="grow-5 basis-0">
           <span className="text-4xl font-mono font-semibold tracking-wide break-keep">
-            {countdown.days}:{countdown.hours}:{countdown.mins}:{countdown.seconds}
+            {countdown
+              ? `${countdown.days}:${countdown.hours}:${countdown.mins}:${countdown.seconds}`
+              : '--:--:--:--'}
           </span>
         </div>
         <div>

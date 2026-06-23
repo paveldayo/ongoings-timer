@@ -1,8 +1,9 @@
-import type { Metadata } from "next"
 import { Toaster } from "@/components/ui/sonner"
+import type { Metadata } from "next"
+import { SessionProvider } from "next-auth/react"
 import { Geist, Geist_Mono } from "next/font/google"
-import "./globals.css"
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
+import "./globals.css"
 
 
 const geistSans = Geist({
@@ -31,15 +32,24 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full max-w-480 mx-auto flex flex-col font-[Geist]">
-        <NuqsAdapter>
+        <Providers>
           {children}
-        </NuqsAdapter>
-
-        <Toaster richColors />
+        </Providers>
       </body>
-      
     </html>
   )
 }
 
+export function Providers({ children }: { children: React.ReactNode }) {
+  return (
+    <>
+      <SessionProvider>
+        <NuqsAdapter>
+          {children}
+        </NuqsAdapter>
+      </SessionProvider>
 
+      <Toaster richColors />
+    </>
+  )
+}
