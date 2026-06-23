@@ -15,10 +15,6 @@ import { useSession, signIn, signOut } from "next-auth/react"
 export default function UserMenu() {
   const session = useSession()
 
-  const handleLogout = async () => {
-    console.log('Logging out...')
-  }
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
@@ -31,9 +27,6 @@ export default function UserMenu() {
       />
 
       <DropdownMenuContent align="end">
-        {
-          session.data ? 'You\'re logged in!!' : 'You\'re not logged in :('
-        }
         <DropdownMenuItem disabled>
           <Settings className="mr-2 h-4 w-4" />
           <span>Settings</span>
@@ -47,7 +40,7 @@ export default function UserMenu() {
 
         {
           session.data && 
-            <DropdownMenuItem onClick={() => signOut()} variant="destructive">
+            <DropdownMenuItem onClick={() => signOut({ callbackUrl: "/sign-in" })} variant="destructive">
               <LogOut className="mr-2 h-4 w-4" />
               <span>Sign out</span>
             </DropdownMenuItem>
@@ -55,7 +48,7 @@ export default function UserMenu() {
 
         {
           !session.data && 
-            <DropdownMenuItem onClick={() => signIn()}>
+            <DropdownMenuItem onClick={() => signIn("github", { callbackUrl: "/cards-list" })}>
               <LogIn className="mr-2 h-4 w-4" />
               <span>Sign in</span>
             </DropdownMenuItem>

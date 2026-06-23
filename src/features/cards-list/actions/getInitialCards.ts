@@ -1,8 +1,10 @@
 'use server'
 import { getNextEpisodeAt } from "@/entities/card/utils/getNextEpisodeAt"
+import { requireAuthSession } from "@/lib/auth/requireAuthSession"
 import { db } from "@/lib/database/drizzle"
 
 export const  getInitialCards = async () => {
+ await requireAuthSession()
  await new Promise(r => setTimeout(r, 500))
 
   try {

@@ -1,11 +1,14 @@
 'use server'
 
+import { requireAuthSession } from "@/lib/auth/requireAuthSession"
 import { db } from "@/lib/database/drizzle"
 import { cards } from "@/lib/database/schema"
 import { eq, sql } from "drizzle-orm"
 
 export async function changeWatched(id: string, diff: -1 | 1) {
   try {
+   await requireAuthSession()
+
    await db.update(cards).set({
     episodes_watched: sql`
       greatest(

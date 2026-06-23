@@ -37,8 +37,8 @@ export default function CardItem({ card }: Props) {
     }
   }, [card.next_episode_at])
 
-  const handleWatchedChange = (id: string, diff: -1 | 1) => {
-    changeWatched(id, diff)
+  const handleWatchedChange = async (id: string, diff: -1 | 1) => {
+    await changeWatched(id, diff)
     router.refresh()
   }
 
@@ -104,8 +104,8 @@ export default function CardItem({ card }: Props) {
 
 function CardOptionsDropdown({ trigger, cardId}: {trigger: ReactElement, cardId: string}) {
   const router = useRouter()
-  const handleDelete = (id: string) => {
-    deleteCard(id)
+  const handleDelete = async (id: string) => {
+    await deleteCard(id)
     router.refresh();
 
   }

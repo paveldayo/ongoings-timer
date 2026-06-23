@@ -2,6 +2,7 @@
 
 import { db } from "@/lib/database/drizzle"
 import { cards } from "@/lib/database/schema"
+import { requireAuthSession } from "@/lib/auth/requireAuthSession"
 import { s3 } from "@/lib/storage/s3"
 import { revalidatePath } from "next/cache"
 import {  PutObjectCommand } from "@aws-sdk/client-s3"
@@ -9,6 +10,8 @@ import { createCardSchema } from "../model/createCardSchema"
 
 export async function createCard(formData: FormData) {
   try {
+    await requireAuthSession()
+
     const parsed = createCardSchema.safeParse({
       title: formData.get("title"),
       player_url: formData.get("player_url"),
