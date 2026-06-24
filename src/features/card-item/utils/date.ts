@@ -1,9 +1,4 @@
 /**
- * @fileoverview Utils for everything date-related
- */
-
-
-/**
  * 
  * @param targetDate Unix date 
  * @returns How much days, hours, minutes and seconds fit in diff between `targetDate` andnow 

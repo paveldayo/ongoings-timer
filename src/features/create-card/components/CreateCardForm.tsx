@@ -1,23 +1,25 @@
 "use client"
 
-import * as React from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Controller, useForm } from "react-hook-form"
 import { useRouter } from "next/navigation"
+import * as React from "react"
+import { Controller, useForm } from "react-hook-form"
 
 import { Button } from "@/components/ui/button"
 import {
-  FieldError,
   Field,
-  FieldGroup,
-  FieldLegend,
-  FieldLabel,
   FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldLegend,
   FieldSet,
 } from "@/components/ui/field"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { randInt } from "@/utils/num"
 import { createCard } from "../actions/createCard"
+import { placeholders } from "../constants"
 import {
   CreateCardFormInput,
   createCardSchema,
@@ -70,6 +72,10 @@ export function CreateCardForm({ onSuccess }: Props) {
     onSuccess?.()
   }
 
+  const getRandomPlaceholder = () => {
+    return placeholders[randInt(0, placeholders.length - 1)]
+  }
+
   return (
     <div>
       <form id="form-rhf-demo" onSubmit={form.handleSubmit(onSubmit)}>
@@ -100,7 +106,7 @@ export function CreateCardForm({ onSuccess }: Props) {
                     {...field}
                     id="form-title"
                     aria-invalid={fieldState.invalid}
-                    placeholder="Fate/Strange Fake"
+                    placeholder={getRandomPlaceholder()}
                     autoComplete="off"
                   />
                   {fieldState.invalid && (
