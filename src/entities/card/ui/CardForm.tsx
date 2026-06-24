@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
@@ -18,36 +18,38 @@ import {
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { randInt } from "@/utils/num"
-import { createCard } from "../actions/createCard"
-import { placeholders } from "../constants"
-import {
-  CreateCardFormInput,
-  createCardSchema,
-  CreateCardValues,
-  releaseDayOptions,
-} from "../model/createCardSchema"
+import { DEFAULT_VALUES, placeholders, releaseDayOptions } from "../constants"
+import { CardFormInput, cardFormSchema, CardFormValues } from "../model/cardFormSchema"
+import { toast } from "sonner"
 
 interface Props {
+  defaultValues?: CardFormInput
+  onSubmit: (formData: FormData) => Promise<{success: boolean, error?: string}>
   onSuccess?: () => void
+  submitLabel?: string
+  submittingLabel?: string
 }
 
-export function CreateCardForm({ onSuccess }: Props) {
+/**
+ * @description Generic card form. No business logic, only validation and UI.
+ * Since there is no BL, it is highly reusable. Needs adapter\wrapper to work (obviously) 
+ */
+
+export default function CardForm({
+  defaultValues = DEFAULT_VALUES,
+  onSubmit,
+  onSuccess,
+  submitLabel = "Save",
+  submittingLabel = "Saving...",
+}: Props) {
   const router = useRouter()
-  const [submitError, setSubmitError] = React.useState<string | null>(null)
-  const form = useForm<CreateCardFormInput, undefined, CreateCardValues>({
-    resolver: zodResolver(createCardSchema),
-    defaultValues: {
-      title: "",
-      player_url: "",
-      episodes_total: 12,
-      episodes_watched: 0,
-      release_day_of_week: 6,
-      release_time: "18:00",
-    }
+  const form = useForm<CardFormInput, undefined, CardFormValues>({
+    resolver: zodResolver(cardFormSchema),
+    defaultValues,
   })
 
 
-  async function onSubmit(_: CreateCardValues, event?: React.BaseSyntheticEvent) {
+  async function handleSubmit(_: CardFormValues, event?: React.BaseSyntheticEvent) {
     if (!event) return
 
     const formData = new FormData(event.target as HTMLFormElement)
@@ -59,15 +61,14 @@ export function CreateCardForm({ onSuccess }: Props) {
       formData.delete("cover")
     }
 
-    setSubmitError(null)
-    const result = await createCard(formData)
+    const result = await onSubmit(formData)
 
-    if (!result?.success) {
-      setSubmitError(result?.error ?? "Failed to create card")
+    if (!result.success) {
+      toast.error(result.error ?? "Failed to save card")
       return
     }
 
-    form.reset()
+    form.reset(defaultValues)
     router.refresh()
     onSuccess?.()
   }
@@ -78,13 +79,13 @@ export function CreateCardForm({ onSuccess }: Props) {
 
   return (
     <div>
-      <form id="form-rhf-demo" onSubmit={form.handleSubmit(onSubmit)}>
+      <form id="form-rhf-demo" onSubmit={form.handleSubmit(handleSubmit)}>
         <FieldGroup>
 
           <FieldSet>
             <FieldLegend variant="legend">General Data</FieldLegend>
             <Field>
-              <FieldLabel htmlFor="form-cover">Cover image  <FieldDescription>Ctrl+V support comes soon*</FieldDescription></FieldLabel>
+              <FieldLabel htmlFor="form-cover">Cover image  <FieldDescription>Ctrl+V support coming soon*</FieldDescription></FieldLabel>
              
               <Input
                 id="form-cover"
@@ -268,13 +269,9 @@ export function CreateCardForm({ onSuccess }: Props) {
             </div>
           </FieldSet>
 
-          {submitError && (
-            <FieldError>{submitError}</FieldError>
-          )}
-
           <Field orientation="horizontal" className="mt-3 justify-end">
             <Button type="submit" form="form-rhf-demo" disabled={form.formState.isSubmitting}>
-              {form.formState.isSubmitting ? "Creating..." : "Create card"}
+              {form.formState.isSubmitting ? submittingLabel : submitLabel}
             </Button>
           </Field>
         </FieldGroup>

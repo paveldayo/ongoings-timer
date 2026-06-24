@@ -1,16 +1,6 @@
 import * as z from "zod"
 
-export const releaseDayOptions = [
-  { value: 0, label: "Sunday" },
-  { value: 1, label: "Monday" },
-  { value: 2, label: "Tuesday" },
-  { value: 3, label: "Wednesday" },
-  { value: 4, label: "Thursday" },
-  { value: 5, label: "Friday" },
-  { value: 6, label: "Saturday" },
-] as const
-
-export const createCardSchema = z
+export const cardFormSchema = z
   .object({
     title: z
       .string()
@@ -48,5 +38,5 @@ export const createCardSchema = z
     message: "Watched episodes can't exceed total episodes",
   })
 
-export type CreateCardFormInput = z.input<typeof createCardSchema>
-export type CreateCardValues = z.infer<typeof createCardSchema>
+export type CardFormInput = z.input<typeof cardFormSchema>
+export type CardFormValues = z.infer<typeof cardFormSchema>

@@ -10,8 +10,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { CreateCardForm } from "./CreateCardForm";
 import { PlusIcon } from "lucide-react";
+import CardForm from "@/entities/card/ui/CardForm";
+import { createCard } from "../actions/createCard";
 
 /**
  * @description Dialog component with state. No form itself. 
@@ -25,7 +26,12 @@ export default function CreateCardFormWrapper() {
       <DialogContent className='min-w-1/2'>
         <DialogHeader>
           <DialogTitle className="text-center mb-3">Add show</DialogTitle>
-          <CreateCardForm onSuccess={() => setOpen(false)} />
+          <CardForm
+            onSubmit={createCard}
+            onSuccess={() => setOpen(false)}
+            submitLabel="Create card"
+            submittingLabel="Creating..."
+          />
         </DialogHeader>
       </DialogContent>
     </Dialog>

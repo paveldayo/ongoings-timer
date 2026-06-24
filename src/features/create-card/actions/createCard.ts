@@ -6,13 +6,14 @@ import { requireAuthenticatedUserId } from "@/lib/auth/requireAuthSession"
 import { s3 } from "@/lib/storage/s3"
 import { revalidatePath } from "next/cache"
 import {  PutObjectCommand } from "@aws-sdk/client-s3"
-import { createCardSchema } from "../model/createCardSchema"
+import { cardFormSchema } from "@/entities/card/model/cardFormSchema"
 
 export async function createCard(formData: FormData) {
   try {
+    throw new Error('imerr')
     const userId = await requireAuthenticatedUserId()
 
-    const parsed = createCardSchema.safeParse({
+    const parsed = cardFormSchema.safeParse({
       title: formData.get("title"),
       player_url: formData.get("player_url"),
       episodes_total: formData.get("episodes_total"),
