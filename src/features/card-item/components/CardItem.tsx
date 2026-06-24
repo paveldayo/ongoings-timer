@@ -11,8 +11,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { ReactElement, useEffect, useState } from "react"
-import { parseDateToCountdown } from "../utils"
+import { ReactElement, useEffect, useLayoutEffect, useState } from "react"
+import { formatCountdown } from "../utils"
 import { useRouter } from "next/navigation";
 import { deleteCard } from "../actions/deleteCard"
 import { changeWatched } from "../actions/changeWatched"
@@ -22,11 +22,11 @@ interface Props {
 }
 export default function CardItem({ card }: Props) {
   const router = useRouter()
-  const [countdown, setCountdown] = useState<ReturnType<typeof parseDateToCountdown> | null>(null)
+  const [countdown, setCountdown] = useState<string | null>(null)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const update = () => {
-      setCountdown(parseDateToCountdown(new Date(card.next_episode_at)))
+      setCountdown(formatCountdown(new Date(card.next_episode_at)))
     }
     update()
     
@@ -82,9 +82,7 @@ export default function CardItem({ card }: Props) {
         </div>
         <div className="grow-5 basis-0">
           <span className="text-4xl font-mono font-semibold tracking-wide break-keep">
-            {countdown
-              ? `${countdown.days}:${countdown.hours}:${countdown.mins}:${countdown.seconds}`
-              : '--:--:--:--'}
+            {countdown ?? '--:--:--:--'}
           </span>
         </div>
         <div>
