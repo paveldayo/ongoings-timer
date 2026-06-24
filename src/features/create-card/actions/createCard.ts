@@ -7,8 +7,9 @@ import { s3 } from "@/lib/storage/s3"
 import { revalidatePath } from "next/cache"
 import {  PutObjectCommand } from "@aws-sdk/client-s3"
 import { cardFormSchema } from "@/entities/card/model/cardFormSchema"
+import { ActionResult } from "@/types"
 
-export async function createCard(formData: FormData) {
+export async function createCard(formData: FormData): Promise<ActionResult> {
   try {
     const userId = await requireAuthenticatedUserId()
 
@@ -61,7 +62,10 @@ export async function createCard(formData: FormData) {
 
     revalidatePath("/cards-list")
 
-    return { success: true }
+    return {
+      success: true,
+      data: null,
+    }
   } catch(error) {
     console.error(error)
     return {

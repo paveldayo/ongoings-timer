@@ -94,7 +94,10 @@ export async function updateCard(id: string, formData: FormData): Promise<Action
     }
 
     revalidatePath("/cards-list")
-    return { success: true }
+    return {
+      success: true,
+      data: null,
+    }
   } catch (error) {
     console.error(error)
     return {

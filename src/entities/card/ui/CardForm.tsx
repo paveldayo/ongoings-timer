@@ -21,10 +21,11 @@ import { DEFAULT_VALUES, placeholders, releaseDayOptions } from "../constants"
 import { CardFormInput, cardFormSchema, CardFormValues } from "../model/cardFormSchema"
 import { toast } from "sonner"
 import { BaseSyntheticEvent } from "react"
+import { ActionResult } from "@/types"
 
 interface Props {
   defaultValues?: CardFormInput
-  onSubmit: (formData: FormData) => Promise<{success: boolean, error?: string}>
+  onSubmit: (formData: FormData) => Promise<ActionResult>
   onSuccess?: () => void
   submitLabel?: string
   submittingLabel?: string
@@ -48,7 +49,7 @@ export default function CardForm({
     defaultValues,
   })
 
-  async function handleSubmit(values: CardFormValues, event?: BaseSyntheticEvent) {
+  async function handleSubmit(_: CardFormValues, event?: BaseSyntheticEvent) {
     if (!event) return
 
     const formData = new FormData(event.target as HTMLFormElement)
@@ -63,7 +64,7 @@ export default function CardForm({
     const result = await onSubmit(formData)
 
     if (!result.success) {
-      toast.error(result.error ?? "Failed to save card")
+      toast.error(result.error ||  "Failed to save card")
       return
     }
 

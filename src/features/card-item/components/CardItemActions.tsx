@@ -3,11 +3,11 @@
 import { useRouter } from "next/navigation"
 import { ReactElement, useState } from "react"
 import { ArchiveIcon, PencilIcon, Trash2Icon } from "lucide-react"
+import { toast } from "sonner"
 
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
@@ -26,9 +26,14 @@ export default function CardItemActions({ card, trigger }: Props) {
   const router = useRouter()
   const [activeDialog, setActiveDialog] = useState<ActiveDialog>(null)
 
-  // TODO: Handle error state
   const handleDelete = async () => {
-    await deleteCard(card.id)
+    const result = await deleteCard(card.id)
+
+    if (!result.success) {
+      toast.error(result.error)
+      return
+    }
+
     router.refresh()
   }
 

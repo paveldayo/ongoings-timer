@@ -5,6 +5,7 @@ import { MinusIcon, MoreVerticalIcon, PlusIcon } from "lucide-react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useLayoutEffect, useState } from "react"
+import { toast } from "sonner"
 import CardItemActions from "./CardItemActions"
 import { changeWatched } from "../actions/changeWatched"
 import { formatCountdown } from "../utils"
@@ -30,7 +31,13 @@ export default function CardItem({ card }: Props) {
   }, [card.next_episode_at])
 
   const handleWatchedChange = async (id: string, diff: -1 | 1) => {
-    await changeWatched(id, diff)
+    const result = await changeWatched(id, diff)
+
+    if (!result.success) {
+      toast.error(result.error)
+      return
+    }
+
     router.refresh()
   }
 
