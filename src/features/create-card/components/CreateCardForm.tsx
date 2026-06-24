@@ -12,6 +12,7 @@ import {
   FieldGroup,
   FieldLegend,
   FieldLabel,
+  FieldDescription,
   FieldSet,
 } from "@/components/ui/field"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -77,7 +78,8 @@ export function CreateCardForm({ onSuccess }: Props) {
           <FieldSet>
             <FieldLegend variant="legend">General Data</FieldLegend>
             <Field>
-              <FieldLabel htmlFor="form-cover">Cover image</FieldLabel>
+              <FieldLabel htmlFor="form-cover">Cover image  <FieldDescription>Ctrl+V support comes soon*</FieldDescription></FieldLabel>
+             
               <Input
                 id="form-cover"
                 name="cover"

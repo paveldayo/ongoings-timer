@@ -20,7 +20,7 @@ export default function CardsPanel({ initialCards, selectedDay }: Props) {
   const { cards, filter, setFilter, ascSort, setAscSort } = useCardsList({ initialCards })
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 mb-5">
       <CardsListControls
         filter={filter}
         setFilter={setFilter}

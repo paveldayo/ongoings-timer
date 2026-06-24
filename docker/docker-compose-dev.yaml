@@ -1,7 +1,7 @@
 # Development env to run Next.
 # It runs a PostgreSQL, identical how it works in production
 
-name: ongoins-countdown
+name: ongoings-countdown
 services:
   db:
     image: postgres:16-alpine
