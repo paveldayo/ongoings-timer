@@ -2,8 +2,8 @@ import { NextResponse } from "next/server"
 
 import { auth } from "@/lib/auth"
 import { NextAuthRequest } from "next-auth"
+import { PUBLIC_PATHS } from "@/config"
 
-const PUBLIC_PATHS = new Set(["/sign-in"]) // TODO: Move to config layer
 
 export default auth((request: NextAuthRequest) => {
   const isAuthenticated = request.auth !== null
