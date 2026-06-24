@@ -3,19 +3,11 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/entities/card/types"
 import { MinusIcon, MoreVerticalIcon, PlusIcon } from "lucide-react"
 import Image from "next/image"
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { ReactElement, useEffect, useLayoutEffect, useState } from "react"
-import { formatCountdown } from "../utils"
-import { useRouter } from "next/navigation";
-import { deleteCard } from "../actions/deleteCard"
+import { useRouter } from "next/navigation"
+import { useLayoutEffect, useState } from "react"
+import CardItemActions from "./CardItemActions"
 import { changeWatched } from "../actions/changeWatched"
+import { formatCountdown } from "../utils"
 
 interface Props {
   card: Card
@@ -86,8 +78,8 @@ export default function CardItem({ card }: Props) {
           </span>
         </div>
         <div>
-          <CardOptionsDropdown
-            cardId={card.id}
+          <CardItemActions
+            card={card}
             trigger={
               <Button variant='ghost'>
                 <MoreVerticalIcon className="focus-within:outline-0"/>
@@ -97,33 +89,5 @@ export default function CardItem({ card }: Props) {
         </div>
       </div>
     </div>
-  )
-}
-
-function CardOptionsDropdown({ trigger, cardId}: {trigger: ReactElement, cardId: string}) {
-  const router = useRouter()
-  const handleDelete = async (id: string) => {
-    await deleteCard(id)
-    router.refresh();
-
-  }
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger render={trigger}>
-        Open
-      </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuGroup>
-          <DropdownMenuItem onClick={() => handleDelete(cardId)}>Delete</DropdownMenuItem>
-          <DropdownMenuItem disabled>Edit</DropdownMenuItem>
-          <DropdownMenuItem disabled>Archive (?)</DropdownMenuItem>
-        </DropdownMenuGroup>
-        {/* <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem>Team</DropdownMenuItem>
-          <DropdownMenuItem>Subscription</DropdownMenuItem>
-        </DropdownMenuGroup> */}
-      </DropdownMenuContent>
-    </DropdownMenu>
   )
 }

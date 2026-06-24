@@ -10,7 +10,6 @@ import { cardFormSchema } from "@/entities/card/model/cardFormSchema"
 
 export async function createCard(formData: FormData) {
   try {
-    throw new Error('imerr')
     const userId = await requireAuthenticatedUserId()
 
     const parsed = cardFormSchema.safeParse({

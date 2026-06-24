@@ -2,7 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
-import * as React from "react"
 import { Controller, useForm } from "react-hook-form"
 
 import { Button } from "@/components/ui/button"
@@ -21,6 +20,7 @@ import { randInt } from "@/utils/num"
 import { DEFAULT_VALUES, placeholders, releaseDayOptions } from "../constants"
 import { CardFormInput, cardFormSchema, CardFormValues } from "../model/cardFormSchema"
 import { toast } from "sonner"
+import { BaseSyntheticEvent } from "react"
 
 interface Props {
   defaultValues?: CardFormInput
@@ -48,8 +48,7 @@ export default function CardForm({
     defaultValues,
   })
 
-
-  async function handleSubmit(_: CardFormValues, event?: React.BaseSyntheticEvent) {
+  async function handleSubmit(values: CardFormValues, event?: BaseSyntheticEvent) {
     if (!event) return
 
     const formData = new FormData(event.target as HTMLFormElement)
@@ -79,7 +78,7 @@ export default function CardForm({
 
   return (
     <div>
-      <form id="form-rhf-demo" onSubmit={form.handleSubmit(handleSubmit)}>
+      <form id="generic-card-form" onSubmit={form.handleSubmit(handleSubmit)}>
         <FieldGroup>
 
           <FieldSet>
@@ -270,7 +269,7 @@ export default function CardForm({
           </FieldSet>
 
           <Field orientation="horizontal" className="mt-3 justify-end">
-            <Button type="submit" form="form-rhf-demo" disabled={form.formState.isSubmitting}>
+            <Button type="submit" form="generic-card-form" disabled={form.formState.isSubmitting}>
               {form.formState.isSubmitting ? submittingLabel : submitLabel}
             </Button>
           </Field>

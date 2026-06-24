@@ -13,7 +13,10 @@ export async function deleteCard(id: string) {
       eq(cards.id, id),
       eq(cards.owner_id, userId),
     ))
+
+    return { success: true }
   } catch(error) {
     console.error(error)
+    return { success: false, error }
   }
 }
