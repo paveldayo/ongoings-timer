@@ -1,14 +1,19 @@
 'use server'
 import { getNextEpisodeAt } from "@/entities/card/utils/getNextEpisodeAt"
-import { requireAuthSession } from "@/lib/auth/requireAuthSession"
+import { requireAuthenticatedUserId } from "@/lib/auth/requireAuthSession"
 import { db } from "@/lib/database/drizzle"
+import { cards } from "@/lib/database/schema"
+import { eq } from "drizzle-orm"
 
 export const  getInitialCards = async () => {
- await requireAuthSession()
+ const userId = await requireAuthenticatedUserId()
  await new Promise(r => setTimeout(r, 500))
 
   try {
-    const rawCards = (await db.query.cards.findMany()).sort((a,b) => +b.created_at - +a.created_at)
+    const rawCards = (await db.query.cards.findMany({
+      where: eq(cards.owner_id, userId),
+    }))
+    // .sort((a,b) => +b.created_at - +a.created_at)
 
     return rawCards.map(card => ({
       ...card,

@@ -20,7 +20,7 @@ export default function CardsList({ selectedDay = 0, cards, renderCardItem }: Pr
 
   return (
     <div className="space-y-3">
-      {/* TODO: Add one cards by default when user visits this page for the first time */}
+      {/* TODO: Add one card by default when user visits this page for the first time */}
       {filteredCards.map(c => renderCardItem(c, c.id))}
     </div>
   );

@@ -11,3 +11,14 @@ export async function requireAuthSession() {
 
   return session
 }
+
+export async function requireAuthenticatedUserId() {
+  const session = await requireAuthSession()
+  const userId = session.user.id
+
+  if (!userId) {
+    redirect("/sign-in")
+  }
+
+  return userId
+}

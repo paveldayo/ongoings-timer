@@ -1,15 +1,18 @@
 'use server'
 
-import { requireAuthSession } from "@/lib/auth/requireAuthSession"
+import { requireAuthenticatedUserId } from "@/lib/auth/requireAuthSession"
 import { db } from "@/lib/database/drizzle"
 import { cards } from "@/lib/database/schema"
-import { eq } from "drizzle-orm"
+import { and, eq } from "drizzle-orm"
 
 export async function deleteCard(id: string) {
   try {
-    await requireAuthSession()
+    const userId = await requireAuthenticatedUserId()
 
-    await db.delete(cards).where(eq(cards.id, id))
+    await db.delete(cards).where(and(
+      eq(cards.id, id),
+      eq(cards.owner_id, userId),
+    ))
   } catch(error) {
     console.error(error)
   }

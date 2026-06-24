@@ -67,7 +67,7 @@ export default function CardItem({ card }: Props) {
             >
               <MinusIcon className="size-4.5"/>
             </Button>
-            {/* TODO: Lover card transparency if watched */}
+            {/* TODO: Lower card transparency if watched */}
             <span className="text-xl font-mono tracking-widest">
               {card.episodes_watched}/{card.episodes_total}
             </span>

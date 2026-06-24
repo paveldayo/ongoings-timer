@@ -2,7 +2,7 @@
 
 import { db } from "@/lib/database/drizzle"
 import { cards } from "@/lib/database/schema"
-import { requireAuthSession } from "@/lib/auth/requireAuthSession"
+import { requireAuthenticatedUserId } from "@/lib/auth/requireAuthSession"
 import { s3 } from "@/lib/storage/s3"
 import { revalidatePath } from "next/cache"
 import {  PutObjectCommand } from "@aws-sdk/client-s3"
@@ -10,7 +10,7 @@ import { createCardSchema } from "../model/createCardSchema"
 
 export async function createCard(formData: FormData) {
   try {
-    const session = await requireAuthSession()
+    const userId = await requireAuthenticatedUserId()
 
     const parsed = createCardSchema.safeParse({
       title: formData.get("title"),
@@ -49,7 +49,7 @@ export async function createCard(formData: FormData) {
     }
 
     await db.insert(cards).values({
-      owner_id: session!.user!.id!,
+      owner_id: userId,
       title: data.title,
       player_url: data.player_url || null,
       episodes_total: data.episodes_total,

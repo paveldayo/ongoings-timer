@@ -1,13 +1,13 @@
 'use server'
 
-import { requireAuthSession } from "@/lib/auth/requireAuthSession"
+import { requireAuthenticatedUserId } from "@/lib/auth/requireAuthSession"
 import { db } from "@/lib/database/drizzle"
 import { cards } from "@/lib/database/schema"
-import { eq, sql } from "drizzle-orm"
+import { and, eq, sql } from "drizzle-orm"
 
 export async function changeWatched(id: string, diff: -1 | 1) {
   try {
-   await requireAuthSession()
+   const userId = await requireAuthenticatedUserId()
 
    await db.update(cards).set({
     episodes_watched: sql`
@@ -19,7 +19,10 @@ export async function changeWatched(id: string, diff: -1 | 1) {
         )
       )
     `,
-  }).where(eq(cards.id, id));
+  }).where(and(
+    eq(cards.id, id),
+    eq(cards.owner_id, userId),
+  ));
   } catch(error) {
     console.error(error)
   }
