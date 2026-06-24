@@ -6,13 +6,13 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/utils/shadcn/utils"
 
 const days = [
-  { short: 'S', full: 'Sunday' },
   { short: 'M', full: 'Monday' },
   { short: 'T', full: 'Tuesday' },
   { short: 'W', full: 'Wednesday' },
   { short: 'T', full: 'Thursday' },
   { short: 'F', full: 'Friday' },
   { short: 'S', full: 'Saturday' },
+  { short: 'S', full: 'Sunday' },
 ]
 
 interface Props {
