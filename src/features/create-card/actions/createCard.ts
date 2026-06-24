@@ -10,7 +10,7 @@ import { createCardSchema } from "../model/createCardSchema"
 
 export async function createCard(formData: FormData) {
   try {
-    await requireAuthSession()
+    const session = await requireAuthSession()
 
     const parsed = createCardSchema.safeParse({
       title: formData.get("title"),
@@ -49,6 +49,7 @@ export async function createCard(formData: FormData) {
     }
 
     await db.insert(cards).values({
+      owner_id: session!.user!.id!,
       title: data.title,
       player_url: data.player_url || null,
       episodes_total: data.episodes_total,
