@@ -27,6 +27,8 @@ export default function CardItemActions({ card, trigger }: Props) {
   const [activeDialog, setActiveDialog] = useState<ActiveDialog>(null)
 
   const handleDelete = async () => {
+    if (!window.confirm("Delete this card?")) return
+
     const result = await deleteCard(card.id)
 
     if (!result.success) {
