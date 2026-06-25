@@ -1,0 +1,16 @@
+.git
+.gitignore
+.next
+node_modules
+npm-debug.log*
+
+.env
+.env.*
+!.env.example
+
+docker/pgdata
+docker/garage/data
+docker/garage/meta
+
+.nixpacks.toml
+README.md
