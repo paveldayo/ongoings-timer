@@ -1,9 +1,14 @@
+# When deploying using Dokploy:
+# Path to the Docker file: "docker/Dockerfile"
+# Context: .
+# It's gonna take Docker file wherever it's located, but to preserve relative paths, we can ask Dokploy to treat in context of root (aka ".")
+
 FROM node:22-alpine AS base
 
 FROM base AS deps
 WORKDIR /app
 
-COPY package.json package-lock.json ./
+COPY ./package.json ./package-lock.json ./
 RUN npm ci
 
 FROM base AS builder
@@ -12,7 +17,7 @@ WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED=1
 
 COPY --from=deps /app/node_modules ./node_modules
-COPY . .
+COPY ./ .
 
 RUN npm run build
 
