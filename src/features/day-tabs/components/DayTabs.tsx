@@ -6,13 +6,13 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/utils/shadcn/utils"
 
 const days = [
-  { short: 'M', full: 'Monday' },
-  { short: 'T', full: 'Tuesday' },
-  { short: 'W', full: 'Wednesday' },
-  { short: 'T', full: 'Thursday' },
-  { short: 'F', full: 'Friday' },
-  { short: 'S', full: 'Saturday' },
-  { short: 'S', full: 'Sunday' },
+  { short: 'M', full: 'Monday', idx: 1 },
+  { short: 'T', full: 'Tuesday', idx: 2 },
+  { short: 'W', full: 'Wednesday', idx: 3 },
+  { short: 'T', full: 'Thursday', idx: 4 },
+  { short: 'F', full: 'Friday', idx: 5 },
+  { short: 'S', full: 'Saturday', idx: 6 },
+  { short: 'S', full: 'Sunday', idx: 0 },
 ]
 
 interface Props {
@@ -26,19 +26,20 @@ export default function DayTabs({ selectedDay, setSelectedDay, hasContentByDay }
 
   return (
     <div className="flex items-center gap-1">
-      {days.map((day, index) => {
-        const isActive = selectedDay === index
-        const isToday = index === todayIndex
-        const hasContent = hasContentByDay[index]
+      {days.map((day) => {
+        
+        const isActive = selectedDay === day.idx
+        const isToday = day.idx === todayIndex
+        const hasContent = hasContentByDay[day.idx]
 
         return (
           <Button
-            key={`day-tab-${index}`}
+            key={`day-tab-${day.idx}`}
             size="sm"
             variant={isActive ? 'default' : 'ghost'}
             className="relative h-9 w-9 p-0 text-sm font-medium focus-visible:ring-0 focus-visible:shadow-md"
             title={day.full}
-            onClick={() => setSelectedDay(index)}
+            onClick={() => setSelectedDay(day.idx)}
             aria-pressed={isActive}
           >
             {day.short}
