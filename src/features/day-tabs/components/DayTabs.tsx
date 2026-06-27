@@ -3,6 +3,7 @@
 import { Dispatch, SetStateAction } from "react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/utils/shadcn/utils"
+import { captureException } from '@sentry/nextjs'
 
 const days = [
   { short: 'M', full: 'Monday', idx: 1 },
@@ -25,6 +26,11 @@ export default function DayTabs({ selectedDay, setSelectedDay, hasContentByDay }
 
   return (
     <div className="flex items-center gap-1">
+      <Button onClick={() => {
+        captureException(new Error("test error 1234"))
+      }}>
+        send err
+      </Button>
       {days.map((day) => {
         
         const isActive = selectedDay === day.idx

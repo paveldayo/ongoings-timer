@@ -7,6 +7,7 @@ import DayTabs from "@/features/day-tabs/components/DayTabs"
 import UserMenu from "@/features/user-menu/components/UserMenu"
 import AppHeader from "@/widgets/app-header/components/AppHeader"
 import CardsPanel from "@/widgets/cards-panel/components/CardsPanel"
+import { useSetSentryUser } from "../hooks"
 
 interface Props {
   initialCards: Card[]
@@ -21,6 +22,7 @@ const buildHasContentByDay = (cards: Card[]) => {
 export default function CardsListScreen({ initialCards }: Props) {
   const [selectedDay, setSelectedDay] = useState(new Date().getDay())
   const hasContentByDay = buildHasContentByDay(initialCards)
+  useSetSentryUser()
 
   return (
     <div className="mx-auto w-260">

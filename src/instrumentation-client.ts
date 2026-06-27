@@ -17,4 +17,6 @@ Sentry.init({
   sendDefaultPii: true,
 });
 
+Sentry.setTag("runtime", "client")
+
 export const onRouterTransitionStart = Sentry.captureRouterTransitionStart;
