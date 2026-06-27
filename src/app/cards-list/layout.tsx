@@ -1,4 +1,13 @@
+import { Loader } from "lucide-react"
 import { Suspense } from "react"
+
+function GlobalLoader() {
+  return (
+    <div className="absolute inset-0 flex justify-center items-center">
+      <Loader className="animate-spin size-10" />
+    </div>
+  )
+}
 
 export default function CardsListLayout({
   children,
@@ -7,7 +16,7 @@ export default function CardsListLayout({
 }>) {
   return (
    <div>
-    <Suspense fallback="loading....">
+    <Suspense fallback={<GlobalLoader />}>
       {children}
     </Suspense>
    </div>
