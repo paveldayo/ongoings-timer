@@ -12,7 +12,6 @@ export async function GET(
 
   if (key === "null") {
     try {
-      // Assumes your placeholder is at public/images/placeholder.png
       const filePath = join(process.cwd(), "public", "placeholder.png")
       const fileBuffer = await readFile(filePath)
       
