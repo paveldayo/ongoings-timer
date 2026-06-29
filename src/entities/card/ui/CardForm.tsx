@@ -16,12 +16,12 @@ import {
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { randInt } from "@/utils/num"
-import { DEFAULT_VALUES, placeholders, releaseDayOptions } from "../constants"
+import { DEFAULT_VALUES, releaseDayOptions } from "../constants"
 import { CardFormInput, cardFormSchema, CardFormValues } from "../model/cardFormSchema"
 import { toast } from "sonner"
 import { BaseSyntheticEvent } from "react"
 import { ActionResult } from "@/types"
+import { getRandomShowName } from "@/utils"
 
 interface Props {
   defaultValues?: CardFormInput
@@ -73,10 +73,6 @@ export default function CardForm({
     onSuccess?.()
   }
 
-  const getRandomPlaceholder = () => {
-    return placeholders[randInt(0, placeholders.length - 1)]
-  }
-
   return (
     <div>
       <form id="generic-card-form" onSubmit={form.handleSubmit(handleSubmit)}>
@@ -107,7 +103,7 @@ export default function CardForm({
                     {...field}
                     id="form-title"
                     aria-invalid={fieldState.invalid}
-                    placeholder={getRandomPlaceholder()}
+                    placeholder={getRandomShowName()}
                     autoComplete="off"
                   />
                   {fieldState.invalid && (

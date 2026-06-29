@@ -11,6 +11,7 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group"
+import { getRandomShowName } from "@/utils"
 import { SearchIcon, SortAscIcon, SortDescIcon } from "lucide-react"
 import { ReactNode } from "react"
 import { Dispatch, SetStateAction } from "react"
@@ -35,7 +36,7 @@ export default function CardsListControls({
       <Field className="shadow-sm">
         <InputGroup className="border-zinc-300 rounded-sm">
           {/* TODO: Placeholders rotation */}
-          <InputGroupInput value={filter} onChange={e => setFilter(e.target.value)} id="cards-search-filter" placeholder="Fate/Strange Fake II"/> 
+          <InputGroupInput value={filter} onChange={e => setFilter(e.target.value)} id="cards-search-filter" placeholder={getRandomShowName()}/> 
           <InputGroupAddon align="inline-end">
             <SearchIcon />
           </InputGroupAddon>

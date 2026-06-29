@@ -18,17 +18,3 @@ export const DEFAULT_VALUES: CardFormInput = {
   release_day_of_week: 6,
   release_time: "13:00",
 } as const
-
-export const placeholders = [
-  'Lycoris Recoil',
-  'Sousou no Frieren',
-  'Tensura IV (2/2)',
-  'Re:Zero IV (1/2)',
-  'Overlord IV',
-  '86',
-  'Mushoku Tensei III',
-  'Fate/Strange Fake (2/2)',
-  'Call of The Night',
-  'Horimiya: Piece',
-  'Witch Hat Atelier',
-]
