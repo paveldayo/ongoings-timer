@@ -39,7 +39,7 @@ export default function RootLayout({
   )
 }
 
-export function Providers({ children }: { children: React.ReactNode }) {
+function Providers({ children }: { children: React.ReactNode }) {
   return (
     <>
       <SessionProvider>
