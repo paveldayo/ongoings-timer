@@ -26,5 +26,5 @@ services:
     volumes:
       - ./garage/meta:/var/lib/garage/meta
       - ./garage/data:/var/lib/garage/data
-      - ./garage/config.toml:/etc/garage/config.toml
+      - ./garage/dev.config.toml:/etc/garage/config.toml
     command: /garage -c /etc/garage/config.toml server

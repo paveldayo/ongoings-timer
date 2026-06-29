@@ -6,7 +6,7 @@ replication_factor = 1
 
 rpc_bind_addr = "[::]:3901"
 rpc_public_addr = "garage:3901"
-rpc_secret = "263b940a9ef771b8ad29b33338a59439c840885257b4b3405e12dacbf7142598"
+rpc_secret = "263b940a9ef771b8ad29b33338a59439c840885257b4b3405e12dacbf7142592"
 
 [s3_api]
 s3_region = "garage"
@@ -23,5 +23,5 @@ api_bind_addr = "[::]:3904"
 
 [admin]
 api_bind_addr = "[::]:3903"
-admin_token = "263b940a9ef771b8ad29b33338a59439c840885257b4b3405e12dacbf7142598"
-metrics_token = "$263b940a9ef771b8ad29b33338a59439c840885257b4b3405e12dacbf7142598"
+admin_token = "263b940a9ef771b8ad29b33338a59439c840885257b4b3405e12dacbf7142592"
+metrics_token = "$263b940a9ef771b8ad29b33338a59439c840885257b4b3405e12dacbf7142592"
