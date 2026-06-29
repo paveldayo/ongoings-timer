@@ -46,7 +46,7 @@ export default function CardItem({ card }: Props) {
 
   return (
     <div className={cn(
-      "h-60 border rounded-md overflow-hidden shadow-[-3px_4px_10px_0_rgba(0,0,0,0.25)] flex transition-opacity hover:opacity-100",
+      "h-60 border rounded-md overflow-hidden shadow-[-3px_4px_10px_0_rgba(0,0,0,0.25)] flex transition-all hover:opacity-100",
       { "opacity-80 h-25": isWatched(card) },
     )}>
       <Image
