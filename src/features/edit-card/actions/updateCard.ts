@@ -9,6 +9,7 @@ import { requireAuthenticatedUserId } from "@/lib/auth/requireAuthSession"
 import { db } from "@/lib/database/drizzle"
 import { cards } from "@/lib/database/schema"
 import { s3 } from "@/lib/storage/s3"
+import { captureException } from "@sentry/nextjs"
 import { ActionResult } from "@/types"
 
 export async function updateCard(id: string, formData: FormData): Promise<ActionResult> {
@@ -99,7 +100,16 @@ export async function updateCard(id: string, formData: FormData): Promise<Action
       data: null,
     }
   } catch (error) {
-    console.error(error)
+    captureException(new Error("Error occurred during card update", { cause: error }), {
+      tags: { action: "updateCard" },
+      extra: {
+        cardId: id,
+        title: formData.get("title"),
+        releaseDayOfWeek: formData.get("release_day_of_week"),
+        releaseTime: formData.get("release_time"),
+        hasCover: formData.get("cover") instanceof File,
+      },
+    })
     return {
       success: false,
       error: "Failed to update card",

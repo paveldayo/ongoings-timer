@@ -4,6 +4,7 @@ import { requireAuthenticatedUserId } from "@/lib/auth/requireAuthSession"
 import { db } from "@/lib/database/drizzle"
 import { cards } from "@/lib/database/schema"
 import { and, eq, sql } from "drizzle-orm"
+import { captureException } from "@sentry/nextjs"
 import { ActionResult } from "@/types"
 
 export async function changeWatched(id: string, diff: -1 | 1): Promise<ActionResult> {
@@ -40,8 +41,11 @@ export async function changeWatched(id: string, diff: -1 | 1): Promise<ActionRes
       success: true,
       data: null,
     }
-  } catch(error) {
-    console.error(error)
+  } catch (error) {
+    captureException(new Error("Failed to update watched episodes counter", { cause: error }), {
+      tags: { action: "changeWatched" },
+      extra: { cardId: id, diff },
+    })
     return {
       success: false,
       error: "Failed to update watched episodes",

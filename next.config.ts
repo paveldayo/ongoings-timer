@@ -5,6 +5,11 @@ const nextConfig: NextConfig = {
   output: "standalone",
   reactCompiler: true,
   cacheComponents: true,
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '10mb'
+    }
+  },
   images: {
     qualities: [75, 100],
     // remotePatterns have no effect in production

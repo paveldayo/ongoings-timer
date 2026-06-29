@@ -4,6 +4,7 @@ import { requireAuthenticatedUserId } from "@/lib/auth/requireAuthSession"
 import { db } from "@/lib/database/drizzle"
 import { cards } from "@/lib/database/schema"
 import { eq } from "drizzle-orm"
+import { captureException } from "@sentry/nextjs"
 
 export const  getInitialCards = async () => {
  const userId = await requireAuthenticatedUserId()
@@ -23,8 +24,11 @@ export const  getInitialCards = async () => {
       }),
     }))
 
-  } catch(error) {
-    console.error(error)
+  } catch (error) {
+    captureException(new Error("Error occurred during initial cards loading", { cause: error }), {
+      tags: { action: "getInitialCards" },
+      extra: { userId },
+    })
     return []
   }
 }

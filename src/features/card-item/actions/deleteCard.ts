@@ -8,6 +8,7 @@ import { s3 } from "@/lib/storage/s3"
 import { revalidatePath } from "next/cache"
 import { and, eq } from "drizzle-orm"
 import { ActionResult } from "@/types"
+import { captureException } from "@sentry/nextjs"
 
 export async function deleteCard(id: string): Promise<ActionResult> {
   try {
@@ -32,12 +33,28 @@ export async function deleteCard(id: string): Promise<ActionResult> {
     }
 
     if (existingCard.image_key) {
-      await s3.send(
-        new DeleteObjectCommand({
-          Bucket: process.env.S3_BUCKET!,
-          Key: existingCard.image_key,
+      try {
+        const result = await s3.send(
+          new DeleteObjectCommand({
+            Bucket: process.env.S3_BUCKET!,
+            Key: existingCard.image_key,
+          })
+        )
+        if (result.$metadata.httpStatusCode !== 200) {
+          throw new Error("Result code is not 200", {
+            cause: result
+          })
+        }
+      } catch (error) {
+        captureException(new Error("Failed to delete card cover from S3 while during card deletion", { cause: error }), {
+          tags: { action: "deleteCard" },
+          extra: {
+            cardId: id,
+            userId,
+            imageKey: existingCard.image_key,
+          },
         })
-      )
+      }
     }
 
     await db.delete(cards).where(and(
@@ -51,8 +68,11 @@ export async function deleteCard(id: string): Promise<ActionResult> {
       success: true,
       data: null,
     }
-  } catch(error) {
-    console.error(error)
+  } catch (error) {
+    captureException(new Error("Error occurred during card deletion", { cause: error }), {
+      tags: { action: "deleteCard" },
+      extra: { cardId: id },
+    })
     return {
       success: false,
       error: "Failed to delete card",

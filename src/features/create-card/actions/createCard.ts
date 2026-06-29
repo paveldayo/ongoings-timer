@@ -7,6 +7,7 @@ import { s3 } from "@/lib/storage/s3"
 import { revalidatePath } from "next/cache"
 import {  PutObjectCommand } from "@aws-sdk/client-s3"
 import { cardFormSchema } from "@/entities/card/model/cardFormSchema"
+import { captureException } from "@sentry/nextjs"
 import { ActionResult } from "@/types"
 
 export async function createCard(formData: FormData): Promise<ActionResult> {
@@ -66,8 +67,16 @@ export async function createCard(formData: FormData): Promise<ActionResult> {
       success: true,
       data: null,
     }
-  } catch(error) {
-    console.error(error)
+  } catch (error) {
+    captureException(new Error("Error occurred during card creation", { cause: error }), {
+      tags: { action: "createCard" },
+      extra: {
+        title: formData.get("title"),
+        releaseDayOfWeek: formData.get("release_day_of_week"),
+        releaseTime: formData.get("release_time"),
+        hasCover: formData.get("cover") instanceof File,
+      },
+    })
     return {
       success: false,
       error: "Failed to create card",
