@@ -11,7 +11,7 @@ export function getNextEpisodeAt({
 }: Params) {
   const [hours, minutes] = releaseTime.split(":").map(Number)
   const dayOffset = (releaseDayOfWeek - now.getDay() + 7) % 7
-  
+
   const nextEpisodeAt = new Date(now)
   nextEpisodeAt.setHours(hours, minutes, 0, 0)
 

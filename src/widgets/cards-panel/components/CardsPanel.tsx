@@ -1,7 +1,7 @@
 'use client'
 
-// Widgets can orchestrate work of multiple features
-// THat's why importing components from cards-list, cards-list and create-card features is completely fine in this example
+// Widgets conceptually can orchestrate work of multiple features
+// That's why importing components from cards-list, cards-list and create-card features is completely fine in this example
 
 import { Card } from "@/entities/card/types";
 
@@ -9,7 +9,7 @@ import CreateCardFormWrapper from "@/features/create-card/components/CreateCardF
 import CardItem from "@/features/card-item/components/CardItem";
 import CardsList from "@/features/cards-list/components/CardsList";
 import CardsListControls from "@/features/cards-list/components/CardsListControls";
-import { useCardsList } from "@/features/cards-list/hooks/useCardsList";
+import { useCardsList } from "@/features/cards-list/hooks";
 
 interface Props {
   initialCards: Card[]

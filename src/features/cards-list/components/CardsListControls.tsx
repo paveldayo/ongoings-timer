@@ -35,7 +35,13 @@ export default function CardsListControls({
     <div className="space-x-3 flex">
       <Field className="shadow-sm">
         <InputGroup className="border-zinc-300 rounded-sm">
-          <InputGroupInput value={filter} onChange={e => setFilter(e.target.value)} id="cards-search-filter" placeholder={getRandomShowName()}/> 
+          <InputGroupInput
+            value={filter}
+            onChange={e => setFilter(e.target.value)}
+            id="cards-search-filter"
+            placeholder={getRandomShowName()}
+            suppressHydrationWarning
+          /> 
           <InputGroupAddon align="inline-end">
             <SearchIcon />
           </InputGroupAddon>

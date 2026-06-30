@@ -5,33 +5,32 @@ import { Card } from "@/entities/card/types"
 import { MinusIcon, MoreVerticalIcon, PlusIcon } from "lucide-react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { useLayoutEffect, useState } from "react"
+import { useMemo } from "react"
 import { toast } from "sonner"
 import CardItemActions from "./CardItemActions"
 import { changeWatched } from "../actions/changeWatched"
 import { formatCountdown, isWatched } from "../utils"
 import { cn } from "@/utils/shadcn/utils"
+import { getNextEpisodeAt } from "@/entities/card/utils/getNextEpisodeAt"
+import { useNow } from "@/features/cards-list/hooks/useNow"
 
 interface Props {
   card: Card
 }
 export default function CardItem({ card }: Props) {
   const router = useRouter()
-  const [countdown, setCountdown] = useState<string | null>(null)
+  
+  const unixTimeNow = useNow()
+  const countdown = useMemo(() => {
+    const now = new Date(unixTimeNow)
+    const nextEpisodeAt = getNextEpisodeAt({
+      releaseDayOfWeek: card.release_day_of_week,
+      releaseTime: card.release_time,
+      now,
+    })
 
-  // Start countdown
-  useLayoutEffect(() => {
-    const updateTimer = () => {
-      setCountdown(formatCountdown(new Date(card.next_episode_at)))
-    }
-    updateTimer()
-
-    const countdownIntervalId = setInterval(updateTimer, 1000)
-
-    return () => {
-      clearInterval(countdownIntervalId)
-    }
-  }, [card.next_episode_at])
+    return formatCountdown(new Date(nextEpisodeAt))
+  }, [card.release_day_of_week, card.release_time, unixTimeNow])
 
   const handleWatchedChange = async (id: string, diff: -1 | 1) => {
     const result = await changeWatched(id, diff)
@@ -47,7 +46,7 @@ export default function CardItem({ card }: Props) {
   return (
     <div className={cn(
       "h-60 border rounded-md overflow-hidden shadow-[-3px_4px_10px_0_rgba(0,0,0,0.25)] flex transition-all hover:opacity-100",
-      { "opacity-80 h-25": isWatched(card) },
+      { "opacity-70 h-25": isWatched(card) },
     )}>
       <Image
         src={`/api/images/${card.image_key}`}
@@ -94,7 +93,7 @@ export default function CardItem({ card }: Props) {
           { "hidden": isWatched(card) }
         )}>
           <span className="text-4xl font-mono font-semibold tracking-wide break-keep">
-            {countdown ?? '--:--:--:--'}
+            {countdown}
           </span>
         </div>
         <div>
