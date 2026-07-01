@@ -19,7 +19,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { DEFAULT_VALUES, releaseDayOptions } from "../constants"
 import { CardFormInput, cardFormSchema, CardFormValues } from "../model/cardFormSchema"
 import { toast } from "sonner"
-import { BaseSyntheticEvent } from "react"
+import { BaseSyntheticEvent, ClipboardEvent, useRef } from "react"
 import { ActionResult } from "@/types"
 import { getRandomShowName } from "@/utils"
 
@@ -44,10 +44,39 @@ export default function CardForm({
   submittingLabel = "Saving...",
 }: Props) {
   const router = useRouter()
+  const coverInputRef = useRef<HTMLInputElement | null>(null)
   const form = useForm<CardFormInput, undefined, CardFormValues>({
     resolver: zodResolver(cardFormSchema),
     defaultValues,
   })
+
+  function handleCoverPaste(event: ClipboardEvent<HTMLFormElement>) {
+    const clipboardItems = Array.from(event.clipboardData.items)
+    const imageItem = clipboardItems.find((item) => item.type.startsWith("image/"))
+
+    if (!imageItem) {
+      return
+    }
+
+    const pastedImage = imageItem.getAsFile()
+
+    if (!pastedImage || !coverInputRef.current) {
+      return
+    }
+
+    event.preventDefault()
+
+    const dataTransfer = new DataTransfer()
+    dataTransfer.items.add(
+      new File([pastedImage], pastedImage.name || "pasted-image.png", {
+        type: pastedImage.type,
+        lastModified: Date.now(),
+      })
+    )
+
+    coverInputRef.current.files = dataTransfer.files
+    toast.success("Cover image pasted")
+  }
 
   async function handleSubmit(_: CardFormValues, event?: BaseSyntheticEvent) {
     if (!event) return
@@ -75,19 +104,24 @@ export default function CardForm({
 
   return (
     <div>
-      <form id="generic-card-form" onSubmit={form.handleSubmit(handleSubmit)}>
+      <form
+        id="generic-card-form"
+        onSubmit={form.handleSubmit(handleSubmit)}
+        onPasteCapture={handleCoverPaste}
+      >
         <FieldGroup>
 
           <FieldSet>
             <FieldLegend variant="legend">General Data</FieldLegend>
             <Field>
-              <FieldLabel htmlFor="form-cover">Cover image  <FieldDescription>Ctrl+V support coming soon*</FieldDescription></FieldLabel>
+              <FieldLabel htmlFor="form-cover">Cover image <FieldDescription>Paste an image with Ctrl+V</FieldDescription></FieldLabel>
              
               <Input
                 id="form-cover"
                 name="cover"
                 type="file"
                 accept="image/*"
+                ref={coverInputRef}
               />
             </Field>
 
