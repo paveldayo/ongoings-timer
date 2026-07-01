@@ -7,7 +7,7 @@ import { and, eq, sql } from "drizzle-orm"
 import { captureException } from "@sentry/nextjs"
 import { ActionResult } from "@/types"
 
-export async function changeWatched(id: string, diff: -1 | 1): Promise<ActionResult> {
+export async function changeWatched(id: string, diff: -1 | 1): Promise<ActionResult<number>> {
   try {
     const userId = await requireAuthenticatedUserId()
 
@@ -28,7 +28,7 @@ export async function changeWatched(id: string, diff: -1 | 1): Promise<ActionRes
         eq(cards.id, id),
         eq(cards.owner_id, userId),
       ))
-      .returning({ id: cards.id })
+      .returning({ id: cards.id, new_episodes_watched: cards.episodes_watched })
 
     if (updatedRows.length === 0) {
       return {
@@ -39,7 +39,7 @@ export async function changeWatched(id: string, diff: -1 | 1): Promise<ActionRes
 
     return {
       success: true,
-      data: null,
+      data: updatedRows[0].new_episodes_watched,
     }
   } catch (error) {
     captureException(new Error("Failed to update watched episodes counter", { cause: error }), {

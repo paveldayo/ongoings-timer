@@ -5,7 +5,7 @@ import { Card } from "@/entities/card/types"
 import { MinusIcon, MoreVerticalIcon, PlusIcon } from "lucide-react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { useMemo } from "react"
+import { useMemo, useRef } from "react"
 import { toast } from "sonner"
 import CardItemActions from "./CardItemActions"
 import { changeWatched } from "../actions/changeWatched"
@@ -13,12 +13,14 @@ import { formatCountdown, isWatched } from "../utils"
 import { cn } from "@/utils/shadcn/utils"
 import { getNextEpisodeAt } from "@/entities/card/utils/getNextEpisodeAt"
 import { useNow } from "@/features/cards-list/hooks/useNow"
+import party from 'party-js'
 
 interface Props {
   card: Card
 }
 export default function CardItem({ card }: Props) {
   const router = useRouter()
+  const cardRef = useRef<HTMLDivElement>(null)
   
   const unixTimeNow = useNow()
   const countdown = useMemo(() => {
@@ -34,20 +36,30 @@ export default function CardItem({ card }: Props) {
 
   const handleWatchedChange = async (id: string, diff: -1 | 1) => {
     const result = await changeWatched(id, diff)
-
+    
     if (!result.success) {
       toast.error(result.error)
       return
     }
 
     router.refresh()
+
+    if (card.episodes_watched === card.episodes_total - 1) {
+      party.confetti(cardRef.current!, {
+        count: 100,
+        spread: 50
+      })
+    }
   }
 
   return (
-    <div className={cn(
-      "h-60 border rounded-md overflow-hidden shadow-[-3px_4px_10px_0_rgba(0,0,0,0.25)] flex transition-all hover:opacity-100",
-      { "opacity-70 h-25": isWatched(card) },
-    )}>
+    <div
+      ref={cardRef}
+      className={cn(
+        "h-60 border rounded-md overflow-hidden shadow-[-3px_4px_10px_0_rgba(0,0,0,0.25)] flex transition-all hover:opacity-100",
+        { "opacity-70 h-25": isWatched(card) },
+      )}
+    >
       <Image
         src={`/api/images/${card.image_key}`}
         alt="Ado-san :з"
