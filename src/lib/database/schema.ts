@@ -1,4 +1,4 @@
-import { index, integer, pgTable, primaryKey, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { index, integer, pgTable, primaryKey, text, timestamp, uuid, boolean } from "drizzle-orm/pg-core";
 
 export const users = pgTable("user", {
   id: text("id")
@@ -58,6 +58,8 @@ export const cards = pgTable("cards", {
 
   updated_at: timestamp().defaultNow().notNull(),
   created_at: timestamp().defaultNow().notNull(),
+
+  is_archived: boolean().default(false)
 }, (card) => ({
   ownerIdIdx: index("cards_owner_id_idx").on(card.owner_id),
 }));

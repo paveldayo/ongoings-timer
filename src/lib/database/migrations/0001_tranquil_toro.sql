@@ -1,0 +1,1 @@
+ALTER TABLE "cards" ADD COLUMN "is_archived" boolean DEFAULT false;
