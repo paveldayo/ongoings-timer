@@ -30,7 +30,7 @@ export default function CardsPanel({ initialCards, selectedDay }: Props) {
       />
 
       <CardsList
-        selectedDay={ selectedDay }
+        filterFn={c => c.release_day_of_week === selectedDay}
         cards={ cards }
         renderCardItem={(cardData, key) => (
           <CardItem card={cardData} key={key} />

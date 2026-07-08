@@ -2,13 +2,13 @@ import { Card } from "@/entities/card/types";
 import { ReactNode } from "react";
 
 interface Props {
-  selectedDay: number
+  filterFn: (card: Card) => boolean
   cards: Card[]
   renderCardItem: (data: Card, key: string) => ReactNode
 }
 
-export default function CardsList({ selectedDay = 0, cards, renderCardItem }: Props) {
-  const filteredCards = cards.filter(c => c.release_day_of_week === selectedDay)
+export default function CardsList({ filterFn, cards, renderCardItem }: Props) {
+  const filteredCards = cards.filter(c => filterFn(c))
   
   if (filteredCards.length === 0) {
     return (
