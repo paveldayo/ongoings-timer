@@ -6,10 +6,10 @@
 import { Card } from "@/entities/card/types";
 
 import CreateCardFormWrapper from "@/features/create-card/components/CreateCardFormWrapper";
-import CardItem from "@/features/card-item/components/CardItem";
 import CardsList from "@/features/cards-list/components/CardsList";
 import CardsListControls from "@/features/cards-list/components/CardsListControls";
 import { useCardsList } from "@/features/cards-list/hooks";
+import { BasicCardItem } from "@/widgets/basic-card-item/components/BasicCardItem";
 
 interface Props {
   initialCards: Card[]
@@ -33,7 +33,8 @@ export default function CardsPanel({ initialCards, selectedDay }: Props) {
         filterFn={c => c.release_day_of_week === selectedDay}
         cards={ cards }
         renderCardItem={(cardData, key) => (
-          <CardItem card={cardData} key={key} />
+          // <CardItem card={cardData} key={key} />
+          <BasicCardItem card={cardData} key={key}  />
         )}
       />
     </div>

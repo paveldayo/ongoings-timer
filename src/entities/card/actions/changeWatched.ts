@@ -46,6 +46,7 @@ export async function changeWatched(id: string, diff: -1 | 1): Promise<ActionRes
       tags: { action: "changeWatched" },
       extra: { cardId: id, diff },
     })
+    
     return {
       success: false,
       error: "Failed to update watched episodes",

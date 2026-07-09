@@ -1,24 +1,32 @@
 'use client'
 
-import { Button } from "@/components/ui/button"
-import { Card } from "@/entities/card/types"
-import { MinusIcon, MoreVerticalIcon, PlusIcon } from "lucide-react"
-import Image from "next/image"
-import { useRouter } from "next/navigation"
-import { useMemo, useRef } from "react"
-import { toast } from "sonner"
-import CardItemActions from "./CardItemActions"
-import { changeWatched } from "../actions/changeWatched"
-import { formatCountdown, isWatched } from "../utils"
-import { cn } from "@/utils/shadcn/utils"
-import { getNextEpisodeAt } from "@/entities/card/utils/getNextEpisodeAt"
-import { useNow } from "@/features/cards-list/hooks/useNow"
 import party from 'party-js'
+import Image from "next/image"
+import { toast } from "sonner"
+import { ReactNode, useMemo, useRef } from "react"
+import { useRouter } from "next/navigation"
+import { MinusIcon, PlusIcon } from "lucide-react"
+
+import { cn } from "@/utils/shadcn/utils"
+import { Card } from "@/entities/card/types"
+import { Button } from "@/components/ui/button"
+import { getNextEpisodeAt } from "@/entities/card/utils/getNextEpisodeAt"
+
+import { useNow } from "@/entities/card/hooks"
+import { formatCountdown, isWatched } from '@/entities/card/utils'
+import { changeWatched } from '@/entities/card/actions'
 
 interface Props {
-  card: Card
+  card: Card,
+  actionsSlot?: ReactNode
 }
-export default function CardItem({ card }: Props) {
+
+/**
+ * @description One of many possible UI representations for Card entity.
+ * Don't have any business logic, but has slot for actions.
+ * If actions will use other features, it's probably a good idea to wrap this component into widget and compose BL there.
+ */
+export default function BasicCard({ card, actionsSlot }: Props) {
   const router = useRouter()
   const cardRef = useRef<HTMLDivElement>(null)
   
@@ -104,19 +112,22 @@ export default function CardItem({ card }: Props) {
           "grow-5 basis-0",
           { "hidden": isWatched(card) }
         )}>
-          <span className="text-4xl font-mono font-semibold tracking-wide break-keep">
+          <span className="text-4xl font-mono font-semibold tracking-wide break-keep" suppressHydrationWarning>
             {countdown}
           </span>
         </div>
         <div>
-          <CardItemActions
+
+        {actionsSlot}
+        
+          {/* <CardItemActions
             card={card}
             trigger={
               <Button variant='ghost'>
                 <MoreVerticalIcon className="focus-within:outline-0" />
               </Button>
             }
-          />
+          /> */}
         </div>
       </div>
     </div>

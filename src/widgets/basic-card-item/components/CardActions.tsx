@@ -1,9 +1,9 @@
 'use client'
 
-import { useRouter } from "next/navigation"
-import { ReactElement, useState } from "react"
-import { ArchiveIcon, PencilIcon, Trash2Icon } from "lucide-react"
 import { toast } from "sonner"
+import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { ArchiveIcon, MoreVerticalIcon, PencilIcon, Trash2Icon } from "lucide-react"
 
 import {
   DropdownMenu,
@@ -11,20 +11,45 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Button } from "@/components/ui/button"
+
 import { Card } from "@/entities/card/types"
+import { deleteCard } from "@/entities/card/actions"
+
+import { archiveCard } from "@/features/archive/actions"
 import EditCardFormWrapper from "@/features/edit-card/components/EditCardFormWrapper"
-import { deleteCard } from "../actions/deleteCard"
 
 interface Props {
   card: Card
-  trigger: ReactElement // Button for opening dropdown menu
 }
 
 type ActiveDialog = 'edit' | null
 
-export default function CardItemActions({ card, trigger }: Props) {
+export default function CardActions({ card }: Props) {
   const router = useRouter()
   const [activeDialog, setActiveDialog] = useState<ActiveDialog>(null)
+
+  const handleArchive = async () => {
+    const result = await archiveCard(card)
+
+    if (!result.success) {
+      toast.error(result.error)
+      return
+    }
+
+    toast.message(`Card "${card.title}" moved to archive.`, {
+      action: (
+        <Button
+          onClick={() => router.push('/archive')}
+          className='ml-auto cursor-pointer'
+        >
+          See
+        </Button>
+      )
+    })
+
+    router.refresh()
+  }
 
   const handleDelete = async () => {
     if (!window.confirm("Delete this card?")) return
@@ -42,21 +67,28 @@ export default function CardItemActions({ card, trigger }: Props) {
   return (
     <>
       <DropdownMenu>
-        <DropdownMenuTrigger render={trigger}/>
+        <DropdownMenuTrigger
+          render={
+            <Button variant='ghost'>
+              <MoreVerticalIcon className="focus-within:outline-0" />
+            </Button>
+          }
+        />
+
         <DropdownMenuContent>
             <DropdownMenuItem onClick={handleDelete}>
               <Trash2Icon className="mr-2 size-4" />
-              Delete
+                Delete
             </DropdownMenuItem>
 
             <DropdownMenuItem onClick={() => setActiveDialog("edit")}>
               <PencilIcon className="mr-2 size-4" />
-              Edit
+                Edit
             </DropdownMenuItem>
 
-            <DropdownMenuItem disabled>
+            <DropdownMenuItem onClick={handleArchive}>
               <ArchiveIcon />
-              Archive
+                Archive
             </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

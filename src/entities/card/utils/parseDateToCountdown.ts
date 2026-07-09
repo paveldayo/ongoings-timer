@@ -1,5 +1,3 @@
-import { Card } from "@/entities/card/types"
-
 /**
  * 
  * @param targetDate Unix date 
@@ -21,16 +19,4 @@ export const parseDateToCountdown = (targetDate: Date) => {
     minutes,
     seconds,
   }
-}
-
-export const formatCountdown = (targetDate: Date) => {
-  const countdown = parseDateToCountdown(targetDate)
-  const sign = targetDate.getTime() < Date.now() ? "-" : ""
-
-  return `${sign}${countdown.days}:${countdown.hours}:${countdown.minutes}:${countdown.seconds}`
-}
-
-
-export const isWatched = (card: Card): boolean => {
-  return card.episodes_watched >= card.episodes_total
 }
