@@ -30,6 +30,9 @@ ENV HOSTNAME=0.0.0.0
 
 RUN addgroup -S nodejs && adduser -S nextjs -G nodejs
 
+COPY ./package.json ./package-lock.json ./
+RUN npm ci --omit=dev
+
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
@@ -40,7 +43,8 @@ EXPOSE 3001
 
 # CMD ["node", "server.js"]
 
-# Run migratins before server start
+# Run migrations before server start.
 COPY --from=builder /app/drizzle.config.ts ./drizzle.config.ts
+COPY --from=builder /app/src/lib/database/schema.ts ./src/lib/database/schema.ts
 COPY --from=builder /app/src/lib/database/migrations ./src/lib/database/migrations
-CMD ["sh", "-c", "npx drizzle-kit migrate && node server.js"]
+CMD ["sh", "-c", "./node_modules/.bin/drizzle-kit migrate && node server.js"]
