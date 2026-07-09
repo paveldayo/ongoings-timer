@@ -38,4 +38,9 @@ USER nextjs
 
 EXPOSE 3001
 
-CMD ["node", "server.js"]
+# CMD ["node", "server.js"]
+
+# Run migratins before server start
+COPY --from=builder /app/drizzle.config.ts ./drizzle.config.ts
+COPY --from=builder /app/src/lib/database/migrations ./src/lib/database/migrations
+CMD ["sh", "-c", "npx drizzle-kit migrate && node server.js"]
