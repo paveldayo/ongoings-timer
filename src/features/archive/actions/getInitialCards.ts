@@ -3,8 +3,8 @@
 import { requireAuthenticatedUserId } from "@/lib/auth/requireAuthSession"
 import { db } from "@/lib/database/drizzle"
 import { cards } from "@/lib/database/schema"
-import { and, eq } from "drizzle-orm"
 import { captureException } from "@sentry/nextjs"
+import { and, eq } from "drizzle-orm"
 
 export const getInitialCards = async () => {
   const userId = await requireAuthenticatedUserId()
@@ -13,12 +13,12 @@ export const getInitialCards = async () => {
     return await db.query.cards.findMany({
       where: and(
         eq(cards.owner_id, userId),
-        eq(cards.is_archived, false)
+        eq(cards.is_archived, true)
       ),
     })
   } catch (error) {
-    captureException(new Error("Error occurred during initial cards loading", { cause: error }), {
-      tags: { action: "getInitialCards (cards list)" },
+    captureException(new Error("Error occurred during initial archive loading", { cause: error }), {
+      tags: { action: "getInitialCards (archive)" },
       extra: { userId },
     })
     

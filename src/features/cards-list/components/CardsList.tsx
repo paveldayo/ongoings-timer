@@ -2,13 +2,13 @@ import { Card } from "@/entities/card/types";
 import { ReactNode } from "react";
 
 interface Props {
-  filterFn: (card: Card) => boolean
+  filterFn?: (card: Card) => boolean
   cards: Card[]
   renderCardItem: (data: Card, key: string) => ReactNode
 }
 
 export default function CardsList({ filterFn, cards, renderCardItem }: Props) {
-  const filteredCards = cards.filter(c => filterFn(c))
+  const filteredCards = filterFn ? cards.filter(c => filterFn(c)) : cards
   
   if (filteredCards.length === 0) {
     return (

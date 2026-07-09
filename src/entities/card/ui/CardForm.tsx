@@ -33,7 +33,7 @@ interface Props {
 
 /**
  * @description Generic card form. No business logic, only validation and UI.
- * Since there is no BL, it is highly reusable. Needs adapter\wrapper to work (obviously) 
+ * Since there is no BL, it is highly reusable. Needs adapter\wrapper to work (obviously)
  */
 
 export default function CardForm({

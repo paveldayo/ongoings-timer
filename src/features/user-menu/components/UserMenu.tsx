@@ -1,6 +1,6 @@
 'use client'
 
-import { Info, LogIn, LogOut, Menu, Settings } from "lucide-react"
+import { Archive, Info, LogIn, LogOut, Menu, Settings } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -11,10 +11,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useSession, signIn, signOut } from "next-auth/react"
+import { useRouter } from "next/navigation"
 
 export default function UserMenu() {
   const session = useSession()
-
+  const router = useRouter()
+  
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
@@ -27,11 +29,18 @@ export default function UserMenu() {
       />
 
       <DropdownMenuContent align="end">
-        <DropdownMenuItem disabled>
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onClick={() => router.push('/archive')}
+        >
+          <Archive className="mr-2 h-4 w-4" />
+          <span>Archive</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem className="cursor-pointer" disabled>
           <Settings className="mr-2 h-4 w-4" />
           <span>Settings</span>
         </DropdownMenuItem>
-        <DropdownMenuItem disabled>
+        <DropdownMenuItem className="cursor-pointer" disabled>
           <Info className="mr-2 h-4 w-4" />
           <span>About</span>
         </DropdownMenuItem>
